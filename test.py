@@ -5,9 +5,9 @@ import re
 import json
 import os
 # 填入试卷的地址
-url = "https://aqks.nju.edu.cn/PersonInfo/StartExamOne.aspx?PaperID=181&UserScoreID=181229"
+url = "https://aqks.nju.edu.cn/PersonInfo/StartExamOne.aspx?PaperID=xxx&UserScoreID=xxxx"
 # 填入cookie
-cookie = "_ga=GA1.1.856900051.1655542278; _ga_J3YE5G7DJT=GS1.1.1677420313.1.1.1677420480.0.0.0; USER_COOKIE=UserName=211870187&UserPassword=; ASP.NET_SessionId=yaotkmvdpbn1sbxiloglbr0l; iPlanetDirectoryPro=bfcZclnajdD7NgecZgumcU; MOD_AUTH_CAS=MOD_AUTH_ST-4099384-21uKjPta2ep6HfbCAVYb1683879523185-0Mqp-cas"
+cookie = "_ga开头的很长的串"
 
 
 headers = {
