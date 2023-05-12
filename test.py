@@ -3,6 +3,7 @@ import sys
 from bs4 import BeautifulSoup  # 借助BeautifulSoup包解析
 import re
 import json
+import os
 # 填入试卷的地址
 url = "https://aqks.nju.edu.cn/PersonInfo/StartExamOne.aspx?PaperID=181&UserScoreID=181229"
 # 填入cookie
@@ -15,8 +16,10 @@ headers = {
     'content-type': 'application/x-www-form-urlencoded',
 }
 question = {}
-path = r"C:\Users\mikumifa\Downloads\Data\ans.json"
+path = os.getcwd()+"\\ans.json"
+print(path)
 f = open(path, 'r', encoding='utf-8')
+txt = open(os.getcwd()+"\\exam_ans.txt", "w")
 question = json.load(f)
 
 sys.path.append('.')
@@ -24,7 +27,7 @@ resultStr = ''
 dest = "https://aqks.nju.edu.cn/xycms.aspx"
 qrlogin = QRlogin()
 session = qrlogin.login(dest)
-for i in range(1, 100):
+for i in range(1, 101):
     q_url = f'{url}&TestNum={i}'
     response = session.get(q_url, headers=headers)
     soup = BeautifulSoup(response.text)
@@ -36,9 +39,15 @@ for i in range(1, 100):
     table = QuestionTable.find_all('tr')
     print(table[0].find_all('td')[0].text)
     q = re.match(r"[0-9]+.(.*)（1分）",
-                 table[0].find_all('td')[0].text).group(1)
-    a = question.get(q, "未知")
+                 table[0].find_all('td')[0].text).group(1).rstrip()
+    a = ''
+    if q not in question:
+        a = "未知"
+    else:
+        a = question[q]
     print("题号", i, "答案", a, "问题", q)
+    txt.write(f"{i}.{a}\n")
     # question[]
 print('success!')
 f.close()
+txt.close()

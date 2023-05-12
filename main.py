@@ -15,12 +15,11 @@ resultStr = ''
 dest = url
 qrlogin = QRlogin()
 session = qrlogin.login(dest)
-question = {"test": "Test"}
+question = {}
 path = os.getcwd()+'\\ans.json'
 print(path)
 txt_path = os.getcwd()+"\\ans.txt"
 f = open(path, 'w', encoding='utf-8')
-json.dump(question, f, ensure_ascii=False)
 txt = open(txt_path, 'w', encoding='utf-8')
 
 for i in range(1, 9999):
@@ -40,7 +39,7 @@ for i in range(1, 9999):
         column_data.append(tds[-1].text)
     if flag == 1:
         break
-    q = re.match(r"[0-9]+.(.*)共 [0-9]+ 题", column_data[0]).group(1)
+    q = re.match(r"[0-9]+.(.*)共 [0-9]+ 题", column_data[0]).group(1).rstrip()
     a = re.match(r"参考答案：(.*)", column_data[-3]).group(1)
     print(i, "finished")
     txt.write(f"{q} {a}\n")
