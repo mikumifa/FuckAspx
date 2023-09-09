@@ -1,13 +1,15 @@
+from math import e
 from NJUlogin import QRlogin
 import sys
 from bs4 import BeautifulSoup  # 借助BeautifulSoup包解析
 import re
 import json
 import os
-# 填入试卷的地址
+# 填入试卷的地址 注意 只到userScoreID, 其他不需要
 url = "https://aqks.nju.edu.cn/PersonInfo/StartExamOne.aspx?PaperID=xxx&UserScoreID=xxxx"
 # 填入cookie
-cookie = "_ga开头的很长的串"
+cookie = "这里填入cookie"
+num=100;
 
 
 headers = {
@@ -27,18 +29,27 @@ resultStr = ''
 dest = "https://aqks.nju.edu.cn/xycms.aspx"
 qrlogin = QRlogin()
 session = qrlogin.login(dest)
-for i in range(1, 101):
+for i in range(1, num+1):
     q_url = f'{url}&TestNum={i}'
-    response = session.get(q_url, headers=headers)
+    response=""
+    try:
+        response = session.get(q_url, headers=headers)
+    except:
+        print("cookie填写有误")
+        exit(-1)
     soup = BeautifulSoup(response.text)
     # 构造id
     idStr = 'trTestTypeContent'+str(i)
-    QuestionTable = soup.find_all('table', {'id': idStr})[0]
+    try:
+        QuestionTable = soup.find_all('table', {'id': idStr})[0]
+    except:
+        print("cookie填写有误")
+        exit(-1)
     column_data = []
     flag = 0
     table = QuestionTable.find_all('tr')
     print(table[0].find_all('td')[0].text)
-    q = re.match(r"[0-9]+.(.*)（1分）",
+    q = re.match(r"[0-9]+.(.*)（.*?分）",
                  table[0].find_all('td')[0].text).group(1).rstrip()
     a = ''
     if q not in question:
